@@ -29,6 +29,7 @@ const sessionParser = session({
 //
 app.use(express.static('client/dist'));
 app.use(sessionParser);
+app.use(express.json());
 app.use(authRouter);
 app.use(function (_, res) {
     res.sendFile(path.resolve(__dirname, 'client/dist/index.html'));

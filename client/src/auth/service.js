@@ -1,9 +1,16 @@
 const authService = {
     isAuthenticated: false,
 
-    signin(callback) {
+    async signin(login) {
         authService.isAuthenticated = true;
-        setTimeout(callback, 100); // fake async
+
+        await fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ login }),
+        });
     },
 
     signout(callback) {

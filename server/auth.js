@@ -8,6 +8,7 @@ router.post('/login', function (req, res) {
     // "Log in" user and set userId to session.
     //
     const id = v4();
+    console.log(req.body);
 
     console.log(`Updating session for user ${id}`);
     req.session.userId = id;

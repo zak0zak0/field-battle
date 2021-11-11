@@ -5,6 +5,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = env => {
     return {
+        watchOptions: {
+            ignored: /node_modules/,
+            aggregateTimeout: 1000,
+        },
         plugins: [
             new MiniCssExtractPlugin({
                 filename: '[name].bundle.css',
@@ -13,7 +17,10 @@ module.exports = env => {
             new webpack.HotModuleReplacementPlugin(),
             new HtmlWebpackPlugin({
                 template: 'public/index.html'
-            })
+            }),
+            new webpack.DefinePlugin({
+                'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+            }),
         ],
         entry: path.resolve(__dirname, 'src', 'index.js'),
         output: {
@@ -40,7 +47,10 @@ module.exports = env => {
                         options: {
                             presets: [
                                 ['@babel/preset-env', {
-                                    "targets": "defaults"
+                                    "targets": {
+                                        "chrome": "74",
+                                    },
+                                    "exclude": ["transform-regenerator"]
                                 }],
                                 '@babel/preset-react'
                             ]

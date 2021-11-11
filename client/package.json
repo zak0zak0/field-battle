@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "set NODE_ENV=development && webpack-dev-server --mode development",
-    "build": "npx webpack --config webpack.config.js --mode production"
+    "build": "npx webpack --config webpack.config.js --mode production",
+    "watch": "npx webpack --config webpack.config.js --watch --mode development"
   },
   "keywords": [],
   "author": "",

@@ -4,7 +4,10 @@ import App from './App';
 import './index.css';
 
 // Opt-in to Webpack hot module replacement
-if (module.hot) module.hot.accept();
+if (process.env.NODE_ENV === 'development') {
+    if (module.hot) module.hot.accept();
+}
+
 
 /* eslint-disable no-undef */
 ReactDOM.render(
