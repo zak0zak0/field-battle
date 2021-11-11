@@ -1,0 +1,8 @@
+input {
+    background-color: var(--field-bg-color);
+    border: var(--border);
+}
+
+.form-field {
+    margin: var(--block-margin);
+}

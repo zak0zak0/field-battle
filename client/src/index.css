@@ -1,7 +1,35 @@
-body {
-    background:#eeeeee; 
+:root {
+    --bg-color: #8C985D;
+    --block-bg-color: #A7B181;
+    --color: #171910;
+    --field-bg-color: #d3d8c0;
+    --canvas-size: 500px;
+    --block-margin: 10px 0;
+    --block-padding: 10px;
+    --border: 2px solid var(--color);
 }
 
-::placeholder {
-    color: gray;
+* {
+    box-sizing: border-box;
 }
+
+body {
+    font-family: monospace;
+    font-weight: bold;
+    background-color: var(--bg-color);
+    color: black;
+}
+
+.container {
+    width: 1000px;
+    margin: auto;
+}
+
+.block {
+    padding: var(--block-padding);
+    border: var(--border);
+    margin: var(--block-margin);
+    position: relative;
+    background-color: var(--block-bg-color);
+}
+

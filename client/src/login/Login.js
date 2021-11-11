@@ -1,32 +1,42 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../auth';
+import ColorTable from '../components/ColorSelect';
 
 const Login = () => {
-    let navigate = useNavigate();
-    let location = useLocation();
-    let auth = useAuth();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const auth = useAuth();
+    const [color, setColor] = useState('');
 
-    let from = location.state?.from?.pathname || "/";
+    const from = location.state?.from?.pathname || "/";
 
     async function handleSubmit(event) {
         event.preventDefault();
 
-        let formData = new FormData(event.currentTarget);
-        let username = formData.get("username");
+        const formData = new FormData(event.currentTarget);
+        const username = formData.get("username");
+        const color = formData.get("color");
 
-        await auth.signin(username);
+        await auth.signin({ username, color });
         navigate(from, { replace: true });
     }
 
     return (
-        <div>
-            <p>You must log in to view the page at {from}</p>
-
+        <div className='block'>
             <form onSubmit={handleSubmit}>
-                <label>
-                    Username: <input name="username" type="text" />
-                </label>{" "}
+                <div className="form-field">
+                    <label>
+                        Username: <input name="username" type="text" />
+                    </label>{" "}
+                </div>
+                <div className="form-field">
+                    <label>
+                        Color:
+                        <span><ColorTable selected={color} onSelect={(color) => setColor(color)} /></span>
+                        <input type="hidden" name="color" value={color} />
+                    </label>
+                </div>
                 <button type="submit">Login</button>
             </form>
         </div>

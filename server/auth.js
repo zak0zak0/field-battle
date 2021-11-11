@@ -11,7 +11,7 @@ router.get('/auth', function (req, res) {
 });
 router.post('/login', function (req, res) {
     const id = v4();
-    console.log(`Updating session for user ${id}`);
+    console.log(`Updating session for user "${req.body?.name ?? "<empty>"}" id=${id}`);
     req.session.user = {
         name: req.body?.name,
         id
