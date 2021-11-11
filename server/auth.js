@@ -3,15 +3,19 @@ import { Router } from 'express';
 
 const router = Router();
 
+router.get('/auth', function (req, res) {
+    res.send({
+        authenticated: typeof req.session.user !== 'undefined',
+        user: req.session.user
+    });
+});
 router.post('/login', function (req, res) {
-    //
-    // "Log in" user and set userId to session.
-    //
     const id = v4();
-    console.log(req.body);
-
     console.log(`Updating session for user ${id}`);
-    req.session.userId = id;
+    req.session.user = {
+        name: req.body?.name,
+        id
+    };
     res.send({ result: 'OK', message: 'Session updated' });
 });
 

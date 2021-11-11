@@ -18,7 +18,7 @@ export default function AuthProvider({ children }) {
         });
     };
 
-    let value = { user, signin, signout };
+    let value = { user, signin, signout, setUser };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

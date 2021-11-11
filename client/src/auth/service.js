@@ -1,6 +1,19 @@
 const authService = {
     isAuthenticated: false,
 
+    async loaduser() {
+        const response = await fetch('/auth');
+        if (!response.ok) {
+            return null;
+        }
+        const data = await response.json();
+        if (data.authenticated) {
+            authService.isAuthenticated = true;
+            return data.user;
+        }
+        return null;
+    },
+
     async signin(login) {
         authService.isAuthenticated = true;
 
@@ -9,7 +22,7 @@ const authService = {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ login }),
+            body: JSON.stringify({ name: login }),
         });
     },
 
