@@ -5,6 +5,11 @@ import express from 'express';
 import { createServer } from 'http';
 import { v4 } from 'uuid';
 import { WebSocketServer } from 'ws';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const map = new Map();
@@ -24,6 +29,10 @@ const sessionParser = session({
 //
 app.use(express.static('client/dist'));
 app.use(sessionParser);
+
+app.use(function (_, res) {
+    res.sendFile(path.resolve(__dirname, 'client/dist/index.html'));
+})
 
 app.post('/login', function (req, res) {
     //
