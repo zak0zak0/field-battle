@@ -30,7 +30,7 @@ const Login = () => {
         <div>
             <p>You must log in to view the page at {from}</p>
 
-            <form onSubmit={handleSubmit}>
+            <form method="post" action="/login">
                 <label>
                     Username: <input name="username" type="text" />
                 </label>{" "}

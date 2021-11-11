@@ -3,10 +3,10 @@
 import session from 'express-session';
 import express from 'express';
 import { createServer } from 'http';
-import { v4 } from 'uuid';
 import { WebSocketServer } from 'ws';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { authRouter } from './server/auth.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -29,31 +29,9 @@ const sessionParser = session({
 //
 app.use(express.static('client/dist'));
 app.use(sessionParser);
-
+app.use(authRouter);
 app.use(function (_, res) {
     res.sendFile(path.resolve(__dirname, 'client/dist/index.html'));
-})
-
-app.post('/login', function (req, res) {
-    //
-    // "Log in" user and set userId to session.
-    //
-    const id = v4();
-
-    console.log(`Updating session for user ${id}`);
-    req.session.userId = id;
-    res.send({ result: 'OK', message: 'Session updated' });
-});
-
-app.delete('/logout', function (request, response) {
-    const ws = map.get(request.session.userId);
-
-    console.log('Destroying session');
-    request.session.destroy(function () {
-        if (ws) ws.close();
-
-        response.send({ result: 'OK', message: 'Session destroyed' });
-    });
 });
 
 //
