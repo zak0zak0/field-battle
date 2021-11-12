@@ -8,12 +8,14 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { authRouter } from './server/auth.js';
 import handleMessage from './server/messages.js';
+import { Manager } from './server/manager.js';
+import { User } from './common/user.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const map = new Map();
+const manager = new Manager();
 
 const sessionParser = session({
     saveUninitialized: false,
@@ -52,17 +54,18 @@ server.on('upgrade', function (request, socket, head) {
 });
 
 wss.on('connection', function (ws, request) {
-    ws.user = request.session.user;
-    const { id } = ws.user;
+    const { user } = request.session;
+    Object.setPrototypeOf(user, User.prototype);
+    const { id } = user;
 
-    map.set(id, ws);
+    manager.user(id, user);
+    manager.set(id, ws);
 
-
-    ws.on('message', handleMessage(map, ws.user));
+    ws.on('message', handleMessage(manager, user));
 
     ws.on('close', function () {
-        map.delete(id);
-        console.log(`Socket for user "${ws.user.name}" id=${id} was closed`);
+        manager.delete(id, ws);
+        console.log(`Socket for user ${user} was closed`);
     });
 });
 

@@ -1,10 +1,9 @@
-function selectLobby(map) {
+function selectLobby(manager) {
     const lobby = {
         team1: [],
         team2: []
     }
-    for (let [id] of map.entries()) {
-        const user = map.get(id).user;
+    for (let user of manager.users()) {
         if (user.team) {
             lobby[user.team].push(user);
         }
@@ -19,41 +18,42 @@ function sendUpdateMessage(ws, lobby) {
     }));
 }
 
-function checkIfLobbyIsReady(map) {
-    for (let [id] of map.entries()) {
-        if (!map.get(id).user.lobbyReady) {
-            return;
+function lobbyIsReady(manager) {
+    for (let user of manager.users()) {
+        if (!user.lobbyReady) {
+            return false;
         }
     }
-    console.log('Lobby is ready');
-    const lobby = selectLobby(map);
-    for (let [id] of map.entries()) {
-        map.get(id).send(JSON.stringify({
+    return true;
+}
+
+function sendLobbyReadyMessage(manager, lobby) {
+    for (let ws of manager.sockets()) {
+        ws.send(JSON.stringify({
             type: 'LOBBY_ALL_READY',
             teams: lobby,
         }));
     }
 }
 
-export function updateLobby(map, user, team) {
-    const storedUser = map.get(user.id).user;
-    const prevTeam = storedUser.team;
-    if (prevTeam == team) {
+export function updateLobby(manager, user, team) {
+    if (user.team == team) {
         return;
     }
-    storedUser.team = team;
-    for (let [id] of map.entries()) {
-        sendUpdateMessage(map.get(id), selectLobby(map));
+    user.team = team;
+    for (let ws of manager.sockets()) {
+        sendUpdateMessage(ws, selectLobby(manager));
     }
 }
 
-export function updateReadyStatus(map, user, ready) {
-    const storedUser = map.get(user.id).user;
-    const prevStatus = storedUser.lobbyReady;
-    if (prevStatus == player.lobbyReady) {
+export function updateReadyStatus(manager, user, ready) {
+    if (user.ready == ready) {
         return;
     }
-    storedUser.lobbyReady = player.lobbyReady;
-    console.log(`player #${storedUser.id}<${storedUser.name}> is ${storedUser.lobbyReady ? "" : "NOT"} ready`);
-    checkIfLobbyIsReady(map);
+    user.ready = ready;
+    console.log(`User ${user} is ${user.ready ? "" : "NOT"} ready`);
+    if (lobbyIsReady(manager)) {
+        console.log('Lobby is ready');
+        sendLobbyReadyMessage(manager, selectLobby(manager));
+    }
 }
