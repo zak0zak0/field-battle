@@ -1,7 +1,10 @@
 import React from 'react'
+import { BuyMenu } from './BuyMenu';
 
 const Warzone = () => (
-    <div>Warzone</div>
+    <div className='block'>
+        <BuyMenu />
+    </div>
 );
 
 export default Warzone;

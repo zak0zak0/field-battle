@@ -27,7 +27,7 @@ export function lobbyIsReady(manager) {
             return false;
         }
     }
-    const length = Array.from(manager.users());
+    const length = Array.from(manager.users()).length;
     return length >= 2;
 }
 
