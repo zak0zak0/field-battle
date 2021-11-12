@@ -1,9 +1,18 @@
-const lobby = {
-    team1: [],
-    team2: []
+function selectLobby(map) {
+    const lobby = {
+        team1: [],
+        team2: []
+    }
+    for (let [id] of map.entries()) {
+        const user = map.get(id).user;
+        if (user.team) {
+            lobby[user.team].push(user);
+        }
+    }
+    return lobby;
 }
 
-function sendUpdateMessage(ws) {
+function sendUpdateMessage(ws, lobby) {
     ws.send(JSON.stringify({
         type: 'LOBBY_TEAMS_UPDATE',
         teams: lobby,
@@ -17,6 +26,7 @@ function checkIfLobbyIsReady(map) {
         }
     }
     console.log('Lobby is ready');
+    const lobby = selectLobby(map);
     for (let [id] of map.entries()) {
         map.get(id).send(JSON.stringify({
             type: 'LOBBY_ALL_READY',
@@ -31,14 +41,9 @@ export function updateLobby(map, user, team) {
     if (prevTeam == team) {
         return;
     }
-    if (typeof prevTeam !== 'undefined' && lobby[prevTeam]?.includes(storedUser)) {
-        const index = lobby[prevTeam].indexOf(storedUser);
-        lobby[prevTeam].splice(index, 1);
-    }
     storedUser.team = team;
-    lobby[team].push(storedUser);
     for (let [id] of map.entries()) {
-        sendUpdateMessage(map.get(id));
+        sendUpdateMessage(map.get(id), selectLobby(map));
     }
 }
 
