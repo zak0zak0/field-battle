@@ -1,14 +1,8 @@
-import React, { useEffect } from 'react';
-import { startSockets } from "../websockets";
-import { useAuth } from '../auth/AuthProvider';
+import React from 'react';
+import useWebsockets from "../websockets/useWebsockets";
 
 const Lobby = () => {
-    const auth = useAuth();
-    useEffect(() => {
-        if (auth.user) {
-            startSockets();
-        }
-    }, []);
+    useWebsockets();
 
     return (<div>Lobby</div>)
 }

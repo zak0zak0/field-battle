@@ -1,33 +1,22 @@
 import { EventSource } from './eventsource';
 
-let socket;
+let socket = null;
 const eventSource = new EventSource()
 
 export function startSockets() {
+    if (socket) {
+        return;
+    }
     socket = new WebSocket(`ws://localhost:8080/websocket`)
 
     socket.onopen = function () {
         console.log('socket is open');
     }
 
-    window.player = {
-        id: null,
-        name: null,
-        color: null,
-        team: null,
-        toString() {
-            return `{id:${this.id} name:"${this.name}" color:${this.color} team:${this.team}}`;
-        }
-    };
-
     socket.onmessage = function (e) {
         const data = JSON.parse(e.data);
         console.log(`event received: ${e.data}`);
         switch (data.type) {
-            case 'SET_PROP': {
-                player[data.prop] = data.value;
-                break;
-            }
             case 'LOBBY_TEAMS_UPDATE': {
                 eventSource.trigger('lobby-team-update', data.teams);
                 break;
