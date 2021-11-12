@@ -4,7 +4,7 @@ export class BuyMenu extends Component {
     render() {
         return (
             <div className='block'>
-                Warzone
+                Buymenu
             </div>
         )
     }
