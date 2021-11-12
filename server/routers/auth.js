@@ -1,6 +1,6 @@
 import { v4 } from 'uuid';
 import { Router } from 'express';
-import { User } from '../common/user.js';
+import { User } from '../../common/user.js';
 
 const router = Router();
 

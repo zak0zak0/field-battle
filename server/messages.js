@@ -1,6 +1,6 @@
 import { updateLobby, updateReadyStatus } from './lobby.js';
 
-export default function handleMessage(manager, user) {
+export function handleMessage(manager, user) {
     return function message(dataJson) {
         const data = JSON.parse(dataJson);
         switch (data.type) {

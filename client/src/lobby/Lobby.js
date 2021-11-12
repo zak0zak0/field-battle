@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useWebsockets from "../websockets/useWebsockets";
 import './lobby.css';
 import TeamList from './TeamList';
@@ -14,11 +14,15 @@ const Lobby = () => {
         });
     }
 
+    useEffect(async () => {
+        const response = await fetch('/lobby/teams');
+        const { teams } = await response.json();
+        setTeams(teams);
+    }, []);
+
     eventSource.on('lobby-team-update', (teams) => {
         setTeams(teams);
     });
-
-    console.log(teams);
 
     return (
         <div className='block'>

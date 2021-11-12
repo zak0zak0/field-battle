@@ -1,3 +1,4 @@
+import { User } from '../../../common/user';
 const authService = {
     isAuthenticated: false,
 
@@ -9,6 +10,7 @@ const authService = {
         const data = await response.json();
         if (data.authenticated) {
             authService.isAuthenticated = true;
+            Object.setPrototypeOf(data.user, User.prototype);
             return data.user;
         }
         return null;
@@ -24,7 +26,9 @@ const authService = {
             },
             body: JSON.stringify({ name, color }),
         });
-        return (await response.json()).user;
+        const user = (await response.json()).user;
+        Object.setPrototypeOf(user, User.prototype);
+        return user;
     },
 
     signout(callback) {

@@ -1,4 +1,4 @@
-function selectLobby(manager) {
+export function selectLobby(manager) {
     const lobby = {
         team1: [],
         team2: []
@@ -18,7 +18,7 @@ function sendUpdateMessage(ws, lobby) {
     }));
 }
 
-function lobbyIsReady(manager) {
+export function lobbyIsReady(manager) {
     for (let user of manager.users()) {
         if (!user.lobbyReady) {
             return false;

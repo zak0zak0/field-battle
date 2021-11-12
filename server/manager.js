@@ -1,6 +1,4 @@
-import { User } from '../common/user.js';
-
-export class Manager {
+export class UsersManager {
     socketMap = new Map();
     userMap = new Map();
 
@@ -41,5 +39,11 @@ export class Manager {
         if (index > -1) {
             items.splice(index, 1);
         }
+        if (!items.length) {
+            this.socketMap.delete(id);
+            this.userMap.delete(id);
+        }
     }
 }
+
+export const manager = new UsersManager();
