@@ -14,9 +14,10 @@ router.post('/login', function (req, res) {
     console.log(`Updating session for user "${req.body?.name ?? "<empty>"}" id=${id}`);
     req.session.user = {
         name: req.body?.name,
-        id
+        color: req.body?.color,
+        id,
     };
-    res.send({ result: 'OK', message: 'Session updated' });
+    res.send({ result: 'OK', message: 'Session updated', user: req.session.user });
 });
 
 router.delete('/logout', function (request, response) {

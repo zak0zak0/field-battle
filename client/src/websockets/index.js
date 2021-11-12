@@ -3,6 +3,10 @@ import { EventSource } from './eventsource';
 let socket = null;
 const eventSource = new EventSource()
 
+export function isOpen() {
+    return socket !== null;
+}
+
 export function startSockets() {
     if (socket) {
         return;
@@ -44,6 +48,9 @@ export function startSockets() {
 }
 
 export function sendMessage(message) {
+    if (typeof message !== 'string') {
+        message = JSON.stringify(message);
+    }
     socket.send(message);
 }
 

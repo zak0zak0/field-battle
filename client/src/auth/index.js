@@ -1,7 +1,6 @@
-import AuthProvider, { AuthStatus, useAuth, RequireAuth } from "./AuthProvider";
+import AuthProvider, { useAuth, RequireAuth } from "./AuthProvider";
 export default AuthProvider;
 export {
-    AuthStatus,
     useAuth,
     RequireAuth
 }

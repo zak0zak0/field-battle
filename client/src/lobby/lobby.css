@@ -1,0 +1,30 @@
+.team-list {
+    display: inline-block;
+    border: var(--border);
+    width: 200px;
+    height: 200px;
+    background-color: var(--field-bg-color);
+    vertical-align: top;
+}
+
+.team-list .team-list-entry {
+    margin: 4px 0;
+    padding: 4px;
+    font-weight: 100;
+}
+
+.team-list .team-list-entry.active-player {
+    font-weight: bold;
+}
+
+.team-list .team-list-entry > .player-color {
+    display: block;
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+    float: left;
+}
+
+.team-list .team-list-entry > .ready {
+    background-color: green;
+}

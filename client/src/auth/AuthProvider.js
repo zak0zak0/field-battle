@@ -7,8 +7,8 @@ export default function AuthProvider({ children }) {
     let [user, setUser] = useState(null);
 
     let signin = async (newUser) => {
-        await authService.signin(newUser);
-        setUser(newUser);
+        const user = await authService.signin(newUser);
+        setUser(user);
     };
 
     let signout = (callback) => {
@@ -25,28 +25,6 @@ export default function AuthProvider({ children }) {
 
 export function useAuth() {
     return useContext(AuthContext);
-}
-
-export function AuthStatus() {
-    let auth = useAuth();
-    let navigate = useNavigate();
-
-    if (!auth.user) {
-        return <p>You are not logged in.</p>;
-    }
-
-    return (
-        <p>
-            Welcome {auth.user}!{" "}
-            <button
-                onClick={() => {
-                    auth.signout(() => navigate("/"));
-                }}
-            >
-                Sign out
-            </button>
-        </p>
-    );
 }
 
 export function RequireAuth({ children }) {

@@ -7,6 +7,7 @@ import { WebSocketServer } from 'ws';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { authRouter } from './server/auth.js';
+import handleMessage from './server/messages.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -51,16 +52,17 @@ server.on('upgrade', function (request, socket, head) {
 });
 
 wss.on('connection', function (ws, request) {
-    const { id, name } = request.session.user;
+    ws.user = request.session.user;
+    const { id } = ws.user;
 
     map.set(id, ws);
 
-    ws.on('message', function (message) {
-        console.log(`Received message ${message} from user "${name}" #${id}`);
-    });
+
+    ws.on('message', handleMessage(map, ws.user));
 
     ws.on('close', function () {
         map.delete(id);
+        console.log(`Socket for user "${ws.user.name}" id=${id} was closed`);
     });
 });
 

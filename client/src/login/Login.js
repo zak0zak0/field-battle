@@ -19,7 +19,7 @@ const Login = () => {
         const color = formData.get("color");
 
         await auth.signin({ username, color });
-        navigate(from, { replace: true });
+        navigate('/lobby');
     }
 
     return (
