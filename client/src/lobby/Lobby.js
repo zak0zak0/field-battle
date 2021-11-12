@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useAuth } from '../auth/AuthProvider';
 import useWebsockets from "../websockets/useWebsockets";
 import './lobby.css';
 import TeamList from './TeamList';
 
 const Lobby = () => {
+    const { user, setUser } = useAuth();
     const { sendMessage, eventSource } = useWebsockets();
     const [teams, setTeams] = useState({ team1: [], team2: [] });
 
@@ -15,6 +17,8 @@ const Lobby = () => {
     }
 
     useEffect(async () => {
+        
+
         const response = await fetch('/lobby/teams');
         const { teams } = await response.json();
         setTeams(teams);
@@ -23,6 +27,17 @@ const Lobby = () => {
     eventSource.on('lobby-team-update', (teams) => {
         setTeams(teams);
     });
+
+    const onReadyClick = () => {
+        sendMessage({
+            type: 'LOBBY_READY',
+            ready: !user.ready
+        });
+        setUser({
+            ...user,
+            ready: !user.ready
+        })
+    }
 
     return (
         <div className='block'>
@@ -33,6 +48,7 @@ const Lobby = () => {
                 <button onClick={() => onClick('team2')}>Team 2</button>
                 <TeamList usersData={teams.team2} />
             </div>
+            <button onClick={onReadyClick}>{!!user.ready ? "Not ready" : "Ready"}</button>
         </div>
     );
 }

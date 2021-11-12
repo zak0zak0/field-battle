@@ -1,7 +1,8 @@
 import { updateLobby, updateReadyStatus } from './lobby.js';
 
-export function handleMessage(manager, user) {
+export function handleMessage(manager, id) {
     return function message(dataJson) {
+        const user = manager.get(id);
         const data = JSON.parse(dataJson);
         switch (data.type) {
             case 'SET_TEAM': {

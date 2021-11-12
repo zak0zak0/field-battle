@@ -20,7 +20,7 @@ function sendUpdateMessage(ws, lobby) {
 
 export function lobbyIsReady(manager) {
     for (let user of manager.users()) {
-        if (!user.lobbyReady) {
+        if (!user.ready) {
             return false;
         }
     }
@@ -52,6 +52,9 @@ export function updateReadyStatus(manager, user, ready) {
     }
     user.ready = ready;
     console.log(`User ${user} is ${user.ready ? "" : "NOT"} ready`);
+    for (let ws of manager.sockets()) {
+        sendUpdateMessage(ws, selectLobby(manager));
+    }
     if (lobbyIsReady(manager)) {
         console.log('Lobby is ready');
         sendLobbyReadyMessage(manager, selectLobby(manager));

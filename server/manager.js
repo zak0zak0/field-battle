@@ -6,13 +6,21 @@ export class UsersManager {
         return this.userMap.values();
     }
 
-    sockets() {
+    sockets(id) {
+        if (id) {
+            return this.socketMap.get(id);
+        }
+
         const arrays = Array.from(this.socketMap, ([_, value]) => value);
         return [].concat.apply([], arrays);
     }
 
     user(id, user) {
-        this.userMap.set(id, user);
+        const existing = this.userMap.get(id);
+        this.userMap.set(id, {
+            ...existing,
+            ...user,
+        });
     }
 
     set(id, ws) {
@@ -27,10 +35,7 @@ export class UsersManager {
     }
 
     get(id) {
-        return {
-            sockets: this.socketMap.get(id),
-            user: this.userMap.get(id)
-        }
+        return this.userMap.get(id);
     }
 
     delete(id, ws) {
@@ -38,10 +43,6 @@ export class UsersManager {
         const index = items.indexOf(ws);
         if (index > -1) {
             items.splice(index, 1);
-        }
-        if (!items.length) {
-            this.socketMap.delete(id);
-            this.userMap.delete(id);
         }
     }
 }

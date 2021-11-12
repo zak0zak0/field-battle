@@ -1,14 +1,16 @@
 import { v4 } from 'uuid';
 import { Router } from 'express';
 import { User } from '../../common/user.js';
+import { manager } from '../manager.js';
 
 const router = Router();
 
 router.get('/auth', function (req, res) {
-    const { user } = req.session;
+    const { userId } = req.session;
+    const user = manager.get(userId);
     const response = {
         authenticated: typeof user !== 'undefined',
-        user
+        user: user,
     }
     res.send(response);
     if (response.authenticated) {
@@ -22,7 +24,8 @@ router.post('/login', function (req, res) {
     const user = new User(id);
     user.name = req.body.name;
     user.color = req.body.color;
-    req.session.user = user;
+    manager.user(id, user);
+    req.session.userId = id;
     res.send({ result: 'OK', user });
 });
 

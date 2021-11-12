@@ -13,7 +13,7 @@ export function startServer(app, sessionParser) {
         console.log('Parsing session from request...');
 
         sessionParser(request, {}, () => {
-            if (!request.session.user) {
+            if (!request.session.userId) {
                 socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
                 socket.destroy();
                 return;
@@ -28,14 +28,14 @@ export function startServer(app, sessionParser) {
     });
 
     wss.on('connection', function (ws, request) {
-        const { user } = request.session;
+        const { userId } = request.session;
+        const user = manager.get(userId);
         Object.setPrototypeOf(user, User.prototype);
-        const { id } = user;
 
-        manager.user(id, user);
+        const { id } = user;
         manager.set(id, ws);
 
-        ws.on('message', handleMessage(manager, user));
+        ws.on('message', handleMessage(manager, id));
 
         ws.on('close', function () {
             manager.delete(id, ws);
