@@ -1,3 +1,6 @@
+import { gameManager } from "./gamemanager.js";
+import { gameState } from '../common/gamestate.js';
+
 export function selectLobby(manager) {
     const lobby = {
         team1: [],
@@ -24,7 +27,8 @@ export function lobbyIsReady(manager) {
             return false;
         }
     }
-    return true;
+    const length = Array.from(manager.users());
+    return length >= 2;
 }
 
 function sendLobbyReadyMessage(manager, lobby) {
@@ -57,6 +61,7 @@ export function updateReadyStatus(manager, user, ready) {
     }
     if (lobbyIsReady(manager)) {
         console.log('Lobby is ready');
+        gameManager.state = gameState.PLACEMENT;
         sendLobbyReadyMessage(manager, selectLobby(manager));
     }
 }

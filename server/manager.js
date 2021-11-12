@@ -45,6 +45,10 @@ export class UsersManager {
             items.splice(index, 1);
         }
     }
+
+    deleteUser(id) {
+        this.userMap.delete(id);
+    }
 }
 
 export const manager = new UsersManager();

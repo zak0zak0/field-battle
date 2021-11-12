@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthProvider';
 import useWebsockets from "../websockets/useWebsockets";
 import './lobby.css';
@@ -6,6 +7,7 @@ import TeamList from './TeamList';
 
 const Lobby = () => {
     const { user, setUser } = useAuth();
+    const navigate = useNavigate();
     const { sendMessage, eventSource } = useWebsockets();
     const [teams, setTeams] = useState({ team1: [], team2: [] });
 
@@ -17,8 +19,6 @@ const Lobby = () => {
     }
 
     useEffect(async () => {
-        
-
         const response = await fetch('/lobby/teams');
         const { teams } = await response.json();
         setTeams(teams);
@@ -26,6 +26,10 @@ const Lobby = () => {
 
     eventSource.on('lobby-team-update', (teams) => {
         setTeams(teams);
+    });
+
+    eventSource.on('lobby-all-ready', () => {
+        navigate('/warzone');
     });
 
     const onReadyClick = () => {

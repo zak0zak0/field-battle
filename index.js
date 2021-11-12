@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url';
 import { authRouter } from './server/routers/auth.js';
 import { lobbyRouter } from './server/routers/lobby.js';
 import { startServer } from './server_start.js';
+import { gameRouter } from './server/routers/game.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,6 +25,7 @@ app.use(sessionParser);
 app.use(express.json());
 app.use(authRouter);
 app.use('/lobby', lobbyRouter);
+app.use('/game', gameRouter);
 app.use(function (_, res) {
     res.sendFile(path.resolve(__dirname, 'client/dist/index.html'));
 });

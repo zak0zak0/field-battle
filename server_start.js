@@ -28,6 +28,7 @@ export function startServer(app, sessionParser) {
     });
 
     wss.on('connection', function (ws, request) {
+
         const { userId } = request.session;
         const user = manager.get(userId);
         Object.setPrototypeOf(user, User.prototype);
@@ -40,6 +41,12 @@ export function startServer(app, sessionParser) {
         ws.on('close', function () {
             manager.delete(id, ws);
             console.log(`Socket for user ${user} was closed`);
+            setTimeout(() => {
+                if (!Array.from(manager.sockets(id)).length) {
+                    console.log(`User ${user} has no active sockets. Removing user`);
+                    manager.deleteUser(id);
+                }
+            }, 5000);
         });
     });
 

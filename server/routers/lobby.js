@@ -4,9 +4,15 @@ import { lobbyIsReady, selectLobby } from '../lobby.js';
 
 const router = Router();
 
-router.get('/teams', function (req, res) {
+router.get('/teams', function (_, res) {
     res.send({
         teams: selectLobby(manager)
+    })
+});
+
+router.get('/all', function (_, res) {
+    res.send({
+        users: Array.from(manager.users())
     })
 });
 
