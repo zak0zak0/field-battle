@@ -1,8 +1,18 @@
 import { User } from '../../../common/user';
+
+const fakeUser = new User('12345');
+fakeUser.name = 'TestUser';
+fakeUser.color = '#FF0000';
+fakeUser.team = 'team1';
+
 const authService = {
     isAuthenticated: false,
 
     async loaduser() {
+        if (process.env.NODE_ENV === 'development' && process.env.WEBPACK_DEV_SERVER) {
+            return fakeUser;
+        }
+
         const response = await fetch('/auth');
         if (!response.ok) {
             return null;
@@ -17,7 +27,9 @@ const authService = {
     },
 
     async signin({ username: name, color }) {
-        authService.isAuthenticated = true;
+        if (process.env.NODE_ENV === 'development' && process.env.WEBPACK_DEV_SERVER) {
+            return fakeUser;
+        }
 
         const response = await fetch('/login', {
             method: 'POST',
@@ -28,6 +40,7 @@ const authService = {
         });
         const user = (await response.json()).user;
         Object.setPrototypeOf(user, User.prototype);
+        authService.isAuthenticated = true;
         return user;
     },
 

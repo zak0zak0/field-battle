@@ -3,6 +3,14 @@ const webpack = require('webpack')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const isDevServer = process.env.DEV_SERVER;
+let defines = {};
+if (isDevServer) {
+    defines = {
+        'process.env.WEBPACK_DEV_SERVER': JSON.stringify('true')
+    }
+}
+
 module.exports = env => {
     return {
         watchOptions: {
@@ -19,7 +27,8 @@ module.exports = env => {
                 template: 'public/index.html'
             }),
             new webpack.DefinePlugin({
-                'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+                ...defines,
+                'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
             }),
         ],
         entry: path.resolve(__dirname, 'src', 'index.js'),

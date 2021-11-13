@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import {
     Routes,
     Route,
-    useNavigate
+    useNavigate,
+    useLocation
 } from "react-router-dom";
 import Lobby from './lobby';
 import Login from './login';
@@ -13,13 +14,16 @@ import { authService } from './auth/service';
 const App = ({ props }) => {
     const auth = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
     const [loaded, setLoaded] = useState(false);
 
     useEffect(async () => {
         const user = await authService.loaduser();
         if (user) {
             auth.setUser(user);
-            navigate('/lobby');
+            if (['/', '/login'].includes(location.pathname)) {
+                navigate('/lobby');
+            }
         }
         setLoaded(true);
     }, []);
