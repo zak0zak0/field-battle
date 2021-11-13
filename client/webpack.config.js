@@ -2,6 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 const isDevServer = process.env.DEV_SERVER;
 let defines = {};
@@ -29,6 +30,12 @@ module.exports = env => {
             new webpack.DefinePlugin({
                 ...defines,
                 'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+            }),
+            new CopyPlugin({
+                patterns: [
+                    { from: "public/images", to: "images" },
+                    { from: "public/data", to: "data" },
+                ],
             }),
         ],
         entry: path.resolve(__dirname, 'src', 'index.js'),

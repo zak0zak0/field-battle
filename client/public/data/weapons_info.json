@@ -1,0 +1,41 @@
+{
+    "weapons": [
+        {
+            "name": "small canon",
+            "size": 1,
+            "armor": 2,
+            "radius": 2,
+            "reload": 1,
+            "damage": 1,
+            "image": "small_canon.png",
+            "price": 100
+        },
+        {
+            "name": "medium canon",
+            "size": 2,
+            "armor": 3,
+            "radius": 3,
+            "reload": 2,
+            "damage": 2,
+            "image": "medium_canon.png",
+            "price": 200
+        },
+        {
+            "name": "big canon",
+            "size": 4,
+            "armor": 5,
+            "radius": 5,
+            "reload": 5,
+            "damage": 4,
+            "image": "big_canon.png",
+            "price": 400
+        }
+    ],
+    "sizes": {
+        "1": 16,
+        "2": 32,
+        "3": 48,
+        "4": 64,
+        "5": 80
+    }
+}

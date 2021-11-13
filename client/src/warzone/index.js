@@ -1,6 +1,7 @@
 import React from 'react'
 import { BuyMenu } from './BuyMenu';
 import BattleZone from './BattleZone';
+import './warzone.css';
 
 const Warzone = () => (
     <div className='block'>
