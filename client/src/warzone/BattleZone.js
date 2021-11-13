@@ -3,9 +3,9 @@ import Field from './Field';
 
 export default function BattleZone() {
     return (
-        <div className='block'>
+        <div className='block warzone'>
             <Field />
-            <Field />
+            <Field className={'field-fog'} />
         </div>
     )
 }

@@ -27,3 +27,20 @@
     background-color: var(--field-bg-color);
     cursor: pointer;
 }
+
+.field-block {
+    border: var(--border);
+    background-color: var(--field-bg-color);
+    width: calc(var(--canvas-size) + 2px);
+    height: calc(var(--canvas-size) + 2px);
+    display: inline-block;
+}
+
+.field-block:first-child {
+    margin-right: 8px;
+}
+
+.field-block.field-fog {
+    background-color: gray;
+}
+
