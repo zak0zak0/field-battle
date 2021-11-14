@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import useWebsockets from '../websockets/useWebsockets';
 import { useBuyMenu } from './context';
 
@@ -8,8 +8,9 @@ export default function Field({ className, player }) {
     const uiRef = useRef();
     const ui = useRef();
     const ctx = useRef();
+    const [units, setUnits] = useState([]);
     const { activeUnit } = useBuyMenu();
-    const { eventSource, sendMessage } = useWebsockets();
+    const { eventSource } = useWebsockets();
 
     const drawUnit = (unit) => {
         const drawing = new Image();
@@ -25,14 +26,19 @@ export default function Field({ className, player }) {
         }
         ctx.current = canvasRef.current.getContext('2d');
         ui.current = uiRef.current.getContext('2d');
-        eventSource.on('place-unit', drawUnit);
+        eventSource.on('place-unit', (unit) => {
+            setUnits([...units, unit])
+        });
 
-        const units = (await (await fetch('/units')).json()).units ?? [];
+        const serverUnits = (await (await fetch('/units')).json()).units ?? [];
+        setUnits(serverUnits);
+    }, []);
+
+    useEffect(() => {
         for (let unit of units) {
             drawUnit(unit);
         }
-
-    }, []);
+    }, [units])
 
     const onClick = async e => {
         if (!player) {
