@@ -3,7 +3,10 @@ import useWebsockets from '../websockets/useWebsockets';
 import { useBuyMenu } from './context';
 
 export default function Field({ className, player }) {
+    const divRef = useRef();
     const canvasRef = useRef();
+    const uiRef = useRef();
+    const ui = useRef();
     const ctx = useRef();
     const { activeUnit } = useBuyMenu();
     const { eventSource, sendMessage } = useWebsockets();
@@ -13,6 +16,7 @@ export default function Field({ className, player }) {
             return;
         }
         ctx.current = canvasRef.current.getContext('2d');
+        ui.current = uiRef.current.getContext('2d');
         eventSource.on('place-unit', unit => {
             const drawing = new Image();
             drawing.src = `images/${unit.image}`;
@@ -29,7 +33,7 @@ export default function Field({ className, player }) {
         if (!activeUnit) {
             return;
         }
-        const rect = canvasRef.current.getBoundingClientRect();
+        const rect = divRef.current.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
         sendMessage({
@@ -41,8 +45,9 @@ export default function Field({ className, player }) {
     }
 
     return (
-        <div className={`field-block ${className ?? ""}`}>
-            <canvas ref={canvasRef} width="470" height="470" onClick={onClick} />
+        <div ref={divRef} className={`field-block ${className ?? ""}`} onClick={onClick}>
+            <canvas ref={uiRef} width="470" height="470" style={{ zIndex: 2 }} />
+            <canvas ref={canvasRef} width="470" height="470" style={{ zIndex: 1, marginTop: '-470px', position: 'relative', top: '-15px' }} />
         </div>
     )
 }

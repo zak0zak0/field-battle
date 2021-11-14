@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import UnitIcon from './UnitIcon';
-import { Unit } from '../../../common/unit';
 
 export class BuyMenu extends Component {
     state = {

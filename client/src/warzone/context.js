@@ -5,7 +5,8 @@ export const BuyMenuContext = React.createContext(null);
 const defaultImgStyles = {
     position: 'absolute',
     pointerEvents: 'none',
-    display: 'none'
+    display: 'none',
+    zIndex: 100
 }
 
 export function useBuyMenu() {
