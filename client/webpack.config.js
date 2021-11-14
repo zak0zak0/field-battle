@@ -5,12 +5,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 
 const isDevServer = process.env.DEV_SERVER;
-let defines = {};
-if (isDevServer) {
-    defines = {
-        'process.env.WEBPACK_DEV_SERVER': JSON.stringify('true')
-    }
-}
 
 module.exports = env => {
     return {
@@ -28,7 +22,7 @@ module.exports = env => {
                 template: 'public/index.html'
             }),
             new webpack.DefinePlugin({
-                ...defines,
+                'process.env.WEBPACK_DEV_SERVER': JSON.stringify(isDevServer),
                 'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
             }),
             new CopyPlugin({
