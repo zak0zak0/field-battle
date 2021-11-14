@@ -1,4 +1,5 @@
 import { updateLobby, updateReadyStatus } from './lobby.js';
+import { placeUnit } from './unitsmanager.js';
 
 export function handleMessage(manager, id) {
     return function message(dataJson) {
@@ -12,6 +13,10 @@ export function handleMessage(manager, id) {
             }
             case 'LOBBY_READY': {
                 updateReadyStatus(manager, user, data.ready);
+                return;
+            }
+            case 'TRY_PLACE_UNIT': {
+                placeUnit(manager, user, data.unit, data.x, data.y);
                 return;
             }
         }

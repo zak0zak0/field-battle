@@ -22,15 +22,17 @@ const Lobby = () => {
         const response = await fetch('/lobby/teams');
         const { teams } = await response.json();
         setTeams(teams);
+
+        eventSource.on('lobby-team-update', (teams) => {
+            setTeams(teams);
+        });
+
+        eventSource.on('lobby-all-ready', () => {
+            navigate('/warzone');
+        });
     }, []);
 
-    eventSource.on('lobby-team-update', (teams) => {
-        setTeams(teams);
-    });
 
-    eventSource.on('lobby-all-ready', () => {
-        navigate('/warzone');
-    });
 
     const onReadyClick = () => {
         sendMessage({
