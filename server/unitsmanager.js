@@ -14,9 +14,23 @@ function intersect(a, b) {
     return length <= summ2;
 }
 
+function sendPlaceUnitMessage(ws, unit) {
+    ws.send(JSON.stringify({
+        type: 'PLACE_UNIT',
+        unit
+    }));
+}
+
 class UnitsManager {
-    units = [];
     size = 470;
+
+    constructor() {
+        this.units = [];
+    }
+
+    getUnits() {
+        return this.units;
+    }
 
     tryPlace(newUnit, x, y) {
         if (!checkBorders(newUnit.size, this.size, x, y)) {
@@ -43,16 +57,18 @@ class UnitsManager {
     }
 }
 
-const units = {
-    team1: new UnitsManager(),
-    team2: new UnitsManager()
+class TeamUnitsManager {
+    team1 = new UnitsManager();
+    team2 = new UnitsManager();
 }
 
-function sendPlaceUnitMessage(ws, unit) {
-    ws.send(JSON.stringify({
-        type: 'PLACE_UNIT',
-        unit
-    }));
+export function getUnitsByTeam(team) {
+    return units[team].units;
+}
+
+export const units = {
+    team1: new UnitsManager(),
+    team2: new UnitsManager()
 }
 
 export function placeUnit(manager, user, unit, x, y) {
