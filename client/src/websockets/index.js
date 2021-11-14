@@ -29,6 +29,10 @@ export function startSockets() {
                 eventSource.trigger('lobby-all-ready', data.teams);
                 break;
             }
+            case 'PLACE_UNIT': {
+                eventSource.trigger('place-unit', data.unit);
+                break;
+            }
         }
     }
 
@@ -48,10 +52,7 @@ export function startSockets() {
 }
 
 export function sendMessage(message) {
-    if (typeof message !== 'string') {
-        message = JSON.stringify(message);
-    }
-    socket.send(message);
+    socket.send(JSON.stringify(message));
 }
 
 export { eventSource };
