@@ -2,13 +2,16 @@ import React, { useEffect, useRef } from 'react';
 import useWebsockets from '../websockets/useWebsockets';
 import { useBuyMenu } from './context';
 
-export default function Field({ className }) {
+export default function Field({ className, player }) {
     const canvasRef = useRef();
     const ctx = useRef();
     const { activeUnit } = useBuyMenu();
     const { eventSource, sendMessage } = useWebsockets();
 
     useEffect(() => {
+        if (!player) {
+            return;
+        }
         ctx.current = canvasRef.current.getContext('2d');
         eventSource.on('place-unit', unit => {
             const drawing = new Image();
@@ -20,6 +23,9 @@ export default function Field({ className }) {
     }, []);
 
     const onClick = e => {
+        if (!player) {
+            return;
+        }
         if (!activeUnit) {
             return;
         }
